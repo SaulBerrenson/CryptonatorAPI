@@ -10,6 +10,7 @@ using CryptonatorApi.enums;
 using CryptonatorApi.exceptions;
 using CryptonatorApi.Extantions;
 using CryptonatorApi.interfaces;
+using CryptonatorApi.json;
 
 namespace CryptonatorApi
 {
@@ -143,16 +144,16 @@ namespace CryptonatorApi
         #endregion
 
         #region /getinvoice
-        public async void GetiInvoice(string invoice_id)
+        public async Task<InvoiceInfo> GetiInvoice(string invoice_id)
         {
-            getinvoice(invoice_id);
+          return await getinvoice(invoice_id);
         }
-        public async void GetiInvoice(IInvoice invoice)
+        public async Task<InvoiceInfo> GetiInvoice(IInvoice invoice)
         {
-            getinvoice(invoice.invoice_id);
+           return await getinvoice(invoice.invoice_id);
         }
 
-        private async void getinvoice(string invoice_id)
+        private async Task<InvoiceInfo> getinvoice(string invoice_id)
         {
             if (merchant_id.IsNullOrWhiteSpaces() || secret_hash.IsNullOrWhiteSpaces()) throw new ApiFailed($"{nameof(merchant_id)} or {nameof(secret_hash)} is empty or null");
             if (invoice_id.IsNullOrWhiteSpaces()) throw new ApiFailed($"ID parameters is null or empty!");
@@ -185,11 +186,8 @@ namespace CryptonatorApi
                             new ApiFailed(await responseMessage?.Content?.ReadAsStringAsync()));
                     #endregion
 
-                    var str = await responseMessage.Content.ReadAsStringAsync();
-                   
-
                     #region Result
-                    return;
+                    return (await responseMessage.Content.ReadAsStringAsync())?.Deserialize<InvoiceInfo>();
                     #endregion
                 }
             }

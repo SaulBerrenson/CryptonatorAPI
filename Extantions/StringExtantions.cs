@@ -6,7 +6,7 @@ using System.Text;
 
 namespace CryptonatorApi.Extantions
 {
-    public static class StringExtantions
+    internal static class StringExtantions
     {
         /// <summary>
         /// Check string null or white spaces
