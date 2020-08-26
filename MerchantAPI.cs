@@ -202,6 +202,54 @@ namespace CryptonatorApi
         }
         #endregion
 
+        #region /listinvoices
+        public async Task<ListInvoiceInfo> Listinvoices(string invoice_status = "",string invoice_currency="",string checkout_currency="")
+        {
+            if (merchant_id.IsNullOrWhiteSpaces() || secret_hash.IsNullOrWhiteSpaces()) throw new ApiFailed($"{nameof(merchant_id)} or {nameof(secret_hash)} is empty or null");
+            try
+            {
+                using (HttpClient requestClient = new HttpClient())
+                {
+                    #region Headers
+
+                    requestClient.DefaultRequestHeaders.Add("User-Agent", UserAgent);
+
+                    #endregion
+
+                    #region PostData
+                    var postContent = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+                    {
+                        new KeyValuePair<string, string>("merchant_id",merchant_id),
+                        new KeyValuePair<string, string>("invoice_status",invoice_status),
+                        new KeyValuePair<string, string>("invoice_currency",invoice_currency),
+                        new KeyValuePair<string, string>("checkout_currency",checkout_currency),
+                        new KeyValuePair<string, string>("secret_hash",secret_hash),
+                    }.SignPostData());
+                    #endregion
+
+                    #region Request
+                    var responseMessage = await requestClient.PostAsync(string.Concat(ApiUrl, "listinvoices"), postContent);
+
+                    if (responseMessage.StatusCode != HttpStatusCode.OK)
+                        throw new ApiFailed("Api error response",
+                            new ApiFailed(await responseMessage?.Content?.ReadAsStringAsync()));
+                    #endregion
+
+                    #region Result
+                    return (await responseMessage.Content.ReadAsStringAsync())?.Deserialize<ListInvoiceInfo>();
+                    #endregion
+                }
+            }
+            catch (HttpRequestException e)
+            {
+                throw e;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        #endregion
 
 
     }
