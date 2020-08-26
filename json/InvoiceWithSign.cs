@@ -6,7 +6,7 @@ namespace CryptonatorAPI.json
     public class InvoiceWithSign : IInvoice
     {
         [JsonProperty("invoice_id")]
-        public string InvoiceId;
+        public string invoice_id { get; set; }
 
         [JsonProperty("checkout_address")]
         public string CheckoutAddress;
@@ -26,6 +26,6 @@ namespace CryptonatorAPI.json
         [JsonProperty("secret_hash")]
         public string SecretHash;
 
-        public string URL => string.Concat("https://rf.cryptonator.com/merchant/invoice/", InvoiceId);
+        public string URL => string.Concat("https://rf.cryptonator.com/merchant/invoice/", invoice_id);
     }
 }

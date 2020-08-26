@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO.Compression;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -17,8 +15,6 @@ namespace CryptonatorAPI
     public class MerchantAPI
     {
         #region Constructors
-      
-
         public MerchantAPI(string _merchantId, string _secretHash)
         {
             merchant_id = _merchantId;
@@ -30,12 +26,10 @@ namespace CryptonatorAPI
 
         #region private
         private string secret_hash;
-        private const string UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36";
         private const string ApiUrl = "https://api.cryptonator.com/api/merchant/v1/";
         #endregion
 
-
-
+        #region Methods
         #region /startpayment
         public async Task<IInvoice> StartPayment(string itemName,
             string amount = "0.0015",
@@ -53,13 +47,9 @@ namespace CryptonatorAPI
 
             try
             {
-                using (HttpClient requestClient = new HttpClient())
+                using (HttpClient requestClient = HttpCreator.Create())
                 {
-                    #region Headers
-
-                    requestClient.DefaultRequestHeaders.Add("User-Agent", UserAgent);
-
-                    #endregion
+                   
                     string queryUrl = String.Empty;
                     #region PostData
 
@@ -150,12 +140,7 @@ namespace CryptonatorAPI
         }
         public async Task<InvoiceInfo> GetiInvoice(IInvoice invoice)
         {
-            switch (invoice)
-            {
-                case InvoiceTicket ticket: return await getinvoice(ticket.invoice_id);
-                case InvoiceWithSign ticketWithSign: return await getinvoice(ticketWithSign.InvoiceId);
-                default: return null;
-            }
+            return await getinvoice(invoice.invoice_id);
         }
 
         private async Task<InvoiceInfo> getinvoice(string invoice_id)
@@ -166,15 +151,9 @@ namespace CryptonatorAPI
 
             try
             {
-                using (HttpClient requestClient = new HttpClient())
+                using (HttpClient requestClient = HttpCreator.Create())
                 {
-                    #region Headers
-
-                    requestClient.DefaultRequestHeaders.Add("User-Agent", UserAgent);
-
-                    #endregion
-                   
-                    #region PostData
+                   #region PostData
                     var postContent = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
                     {
                         new KeyValuePair<string, string>("merchant_id",merchant_id),
@@ -213,14 +192,8 @@ namespace CryptonatorAPI
             if (merchant_id.IsNullOrWhiteSpaces() || secret_hash.IsNullOrWhiteSpaces()) throw new ApiFailed($"{nameof(merchant_id)} or {nameof(secret_hash)} is empty or null");
             try
             {
-                using (HttpClient requestClient = new HttpClient())
+                using (HttpClient requestClient = HttpCreator.Create())
                 {
-                    #region Headers
-
-                    requestClient.DefaultRequestHeaders.Add("User-Agent", UserAgent);
-
-                    #endregion
-
                     #region PostData
                     var postContent = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
                     {
@@ -269,13 +242,9 @@ namespace CryptonatorAPI
             if (merchant_id.IsNullOrWhiteSpaces() || secret_hash.IsNullOrWhiteSpaces()) throw new ApiFailed($"{nameof(merchant_id)} or {nameof(secret_hash)} is empty or null");
             try
             {
-                using (HttpClient requestClient = new HttpClient())
+                using (HttpClient requestClient = HttpCreator.Create())
                 {
-                    #region Headers
-
-                    requestClient.DefaultRequestHeaders.Add("User-Agent", UserAgent);
-
-                    #endregion
+                   
 
                     #region PostData
                     var postContent = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
@@ -318,7 +287,7 @@ namespace CryptonatorAPI
             }
         }
         #endregion
-
+        #endregion
 
     }
 }
