@@ -22,8 +22,9 @@ namespace CryptonatorAPI
         }
         #endregion
 
+        #region public
         public string merchant_id { get; private set; }
-
+        #endregion
         #region private
         private string secret_hash;
         private const string ApiUrl = "https://api.cryptonator.com/api/merchant/v1/";
@@ -31,6 +32,18 @@ namespace CryptonatorAPI
 
         #region Methods
         #region /startpayment
+        /// <summary>
+        /// Request to create new invoice
+        /// </summary>
+        /// <param name="itemName">Name of an item or service.</param>
+        /// <param name="amount">Invoice amount</param>
+        /// <param name="currency">Invoice currency</param>
+        /// <param name="language">Language of the checkout page</param>
+        /// <param name="order_id">Order ID for your accounting purposes</param>
+        /// <param name="item_description">Description of an item or service.</param>
+        /// <param name="success_url">An URL to which users will be redirected after a successful payment</param>
+        /// <param name="failed_url">An URL to which users will be redirected after a cancelled or failed payment</param>
+        /// <returns></returns>
         public async Task<IInvoice> StartPayment(string itemName,
             string amount = "0.0015",
             CurrencyType currency = CurrencyType.bitcoin,
@@ -134,10 +147,20 @@ namespace CryptonatorAPI
         #endregion
 
         #region /getinvoice
+        /// <summary>
+        /// Request to return invoice status
+        /// </summary>
+        /// <param name="invoice_id">Invoice ID</param>
+        /// <returns></returns>
         public async Task<InvoiceInfo> GetiInvoice(string invoice_id)
         {
           return await getinvoice(invoice_id);
         }
+        /// <summary>
+        /// Request to return invoice status
+        /// </summary>
+        /// <param name="invoice"></param>
+        /// <returns></returns>
         public async Task<InvoiceInfo> GetiInvoice(IInvoice invoice)
         {
             return await getinvoice(invoice.invoice_id);
@@ -187,6 +210,34 @@ namespace CryptonatorAPI
         #endregion
 
         #region /listinvoices
+        /// <summary>
+        /// Request to return all invoices for the account
+        /// </summary>
+        /// <param name="invoice_status">
+        /// Invoice status:
+        /// paid
+        /// unpaid
+        /// cancelled
+        /// mispaid
+        /// </param>
+        /// <param name="invoice_currency">
+        ///blackcoin
+        /// bitcoin
+        /// dash
+        /// dogecoin
+        /// emercoin
+        /// litecoin
+        /// peercoin
+        /// </param>
+        /// <param name="checkout_currency">
+        /// blackcoin
+        /// bitcoin
+        /// dash
+        /// dogecoin
+        /// emercoin
+        /// litecoin
+        /// peercoin</param>
+        /// <returns></returns>
         public async Task<ListInvoiceInfo> Listinvoices(string invoice_status = "",string invoice_currency="",string checkout_currency="")
         {
             if (merchant_id.IsNullOrWhiteSpaces() || secret_hash.IsNullOrWhiteSpaces()) throw new ApiFailed($"{nameof(merchant_id)} or {nameof(secret_hash)} is empty or null");
@@ -230,6 +281,18 @@ namespace CryptonatorAPI
         #endregion
 
         #region /createinvoice
+        /// <summary>
+        /// Request to create new invoice with preset checkout currency
+        /// </summary>
+        /// <param name="itemName">Name of an item or service.</param>
+        /// <param name="amount">Invoice amount</param>
+        /// <param name="currency">Invoice currency</param>
+        /// <param name="language">Language of the checkout page</param>
+        /// <param name="order_id">Order ID for your accounting purposes</param>
+        /// <param name="item_description">Description of an item or service.</param>
+        /// <param name="success_url">An URL to which users will be redirected after a successful payment</param>
+        /// <param name="failed_url">An URL to which users will be redirected after a cancelled or failed payment</param>
+        /// <returns></returns>
         public async Task<InvoiceWithSign> CreateInvoice(string itemName,
             string amount = "0.0015",
             CurrencyType currency = CurrencyType.bitcoin,

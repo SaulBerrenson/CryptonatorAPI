@@ -23,7 +23,15 @@ namespace CryptonatorAPI
         }
         #endregion
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tickerType">
+        /// Simple ticker - Returns actual volume-weighted price, total 24h volume and the price change.
+        /// Complete ticker - Returns actual volume-weighted price, total 24h volume, rate change as well as prices and volumes across all connected exchanges. 
+        /// </param>
+        /// <param name="direction">Default request for BTC-USD</param>
+        /// <returns></returns>
         public async Task<TickerResponse> Get(UrlTickerType tickerType = UrlTickerType.SimpleTicker, string direction = "btc-usd")
         {
             try
