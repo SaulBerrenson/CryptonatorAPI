@@ -1,7 +1,7 @@
-﻿using CryptonatorApi.interfaces;
+﻿using CryptonatorAPI.interfaces;
 using Newtonsoft.Json;
 
-namespace CryptonatorApi.json
+namespace CryptonatorAPI.json
 {
     public class InvoiceWithSign : IInvoice
     {

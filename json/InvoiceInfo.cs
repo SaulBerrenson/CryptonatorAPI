@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace CryptonatorApi.json
+namespace CryptonatorAPI.json
 {
     public class InvoiceInfo
     {

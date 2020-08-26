@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace CryptonatorApi.Extantions
+namespace CryptonatorAPI.Extantions
 {
     internal static class JsonExtantions
     {

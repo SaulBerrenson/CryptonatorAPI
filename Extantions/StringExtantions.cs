@@ -4,7 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace CryptonatorApi.Extantions
+namespace CryptonatorAPI.Extantions
 {
     internal static class StringExtantions
     {

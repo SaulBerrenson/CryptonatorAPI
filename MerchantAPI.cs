@@ -6,13 +6,13 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using CryptonatorApi.enums;
-using CryptonatorApi.exceptions;
-using CryptonatorApi.Extantions;
-using CryptonatorApi.interfaces;
-using CryptonatorApi.json;
+using CryptonatorAPI.enums;
+using CryptonatorAPI.exceptions;
+using CryptonatorAPI.Extantions;
+using CryptonatorAPI.interfaces;
+using CryptonatorAPI.json;
 
-namespace CryptonatorApi
+namespace CryptonatorAPI
 {
     public class MerchantAPI
     {

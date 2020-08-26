@@ -1,4 +1,4 @@
-﻿namespace CryptonatorApi.enums
+﻿namespace CryptonatorAPI.enums
 {
     public enum CurrencyType
     {

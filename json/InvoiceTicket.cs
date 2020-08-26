@@ -1,11 +1,11 @@
-﻿using CryptonatorApi.enums;
+﻿using CryptonatorAPI.enums;
 
-namespace CryptonatorApi
+namespace CryptonatorAPI
 {
     /// <summary>
     /// Base Invoice Tiket
     /// </summary>
-    public class InvoiceTicket : CryptonatorApi.interfaces.IInvoice
+    public class InvoiceTicket : CryptonatorAPI.interfaces.IInvoice
     {
         #region Constructors
         public InvoiceTicket(string itemName, decimal invoiceAmount, CurrencyType checkoutCurrency = CurrencyType.bitcoin, CurrencyType invoiceCurrency = CurrencyType.bitcoin, LangPayment _lang = LangPayment.ru)

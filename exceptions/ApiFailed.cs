@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CryptonatorApi.exceptions
+namespace CryptonatorAPI.exceptions
 {
     public class ApiFailed : Exception
     {
