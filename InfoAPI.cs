@@ -24,7 +24,7 @@ namespace CryptonatorAPI
         #endregion
 
         /// <summary>
-        /// 
+        /// Information about currency
         /// </summary>
         /// <param name="tickerType">
         /// Simple ticker - Returns actual volume-weighted price, total 24h volume and the price change.
