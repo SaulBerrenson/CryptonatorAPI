@@ -150,7 +150,12 @@ namespace CryptonatorApi
         }
         public async Task<InvoiceInfo> GetiInvoice(IInvoice invoice)
         {
-           return await getinvoice(invoice.invoice_id);
+            switch (invoice)
+            {
+                case InvoiceTicket ticket: return await getinvoice(ticket.invoice_id);
+                case InvoiceWithSign ticketWithSign: return await getinvoice(ticketWithSign.InvoiceId);
+                default: return null;
+            }
         }
 
         private async Task<InvoiceInfo> getinvoice(string invoice_id)
@@ -237,6 +242,69 @@ namespace CryptonatorApi
 
                     #region Result
                     return (await responseMessage.Content.ReadAsStringAsync())?.Deserialize<ListInvoiceInfo>();
+                    #endregion
+                }
+            }
+            catch (HttpRequestException e)
+            {
+                throw e;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        #endregion
+
+        #region /createinvoice
+        public async Task<InvoiceWithSign> CreateInvoice(string itemName,
+            string amount = "0.0015",
+            CurrencyType currency = CurrencyType.bitcoin,
+            LangPayment language = LangPayment.ru,
+            string order_id = "",
+            string item_description = "",
+            string success_url = "",
+            string failed_url = "")
+        {
+            if (merchant_id.IsNullOrWhiteSpaces() || secret_hash.IsNullOrWhiteSpaces()) throw new ApiFailed($"{nameof(merchant_id)} or {nameof(secret_hash)} is empty or null");
+            try
+            {
+                using (HttpClient requestClient = new HttpClient())
+                {
+                    #region Headers
+
+                    requestClient.DefaultRequestHeaders.Add("User-Agent", UserAgent);
+
+                    #endregion
+
+                    #region PostData
+                    var postContent = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+                    {
+                        new KeyValuePair<string, string>("merchant_id",merchant_id),
+                        new KeyValuePair<string, string>("item_name",itemName),
+                        new KeyValuePair<string, string>("order_id",order_id),
+                        new KeyValuePair<string, string>("item_description", item_description),
+                        new KeyValuePair<string, string>("checkout_currency",currency.ToString()),
+                        new KeyValuePair<string, string>("invoice_amount",amount),
+                        new KeyValuePair<string, string>("invoice_currency",currency.ToString()),
+                        new KeyValuePair<string, string>("success_url",success_url),
+                        new KeyValuePair<string, string>("failed_url",failed_url),
+                        new KeyValuePair<string, string>("language",language.ToString()),
+
+                        new KeyValuePair<string, string>("secret_hash",secret_hash),
+                    }.SignPostData());
+                    #endregion
+
+                    #region Request
+                    var responseMessage = await requestClient.PostAsync(string.Concat(ApiUrl, "createinvoice"), postContent);
+
+                    if (responseMessage.StatusCode != HttpStatusCode.Created)
+                        throw new ApiFailed("Api error response",
+                            new ApiFailed(await responseMessage?.Content?.ReadAsStringAsync()));
+                    #endregion
+
+                    #region Result
+                    return (await responseMessage.Content.ReadAsStringAsync())?.Deserialize<InvoiceWithSign>();
                     #endregion
                 }
             }
